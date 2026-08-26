@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const SCENE_GAP = 150;
   const mobile = matchMedia('(pointer: coarse)').matches;
   const particleStep = mobile ? 8 : 7;
-  const heartParticleCount = mobile ? 620 : 900;
+  const heartParticleCount = mobile ? 520 : 760;
   const maxDpr = mobile ? 1.25 : 1.55;
   const random = (min, max) => min + Math.random() * (max - min);
   const clamp = value => Math.min(1, Math.max(0, value));
@@ -92,8 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function resize() {
     const oldWidth = width || window.innerWidth;
     const oldHeight = height || window.innerHeight;
-    width = window.innerWidth;
-    height = window.innerHeight;
+    width = Math.round(window.visualViewport?.width || window.innerWidth);
+    height = Math.round(window.visualViewport?.height || window.innerHeight);
     dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
     setCanvasSize(background, bg);
     setCanvasSize(canvas, ctx);
@@ -328,8 +328,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return {
         curvePosition: slot / slotCount * heartCurve.length + random(-.42, .42),
         orbitSpeed: (stream % 2 === 0 ? 1 : -1) * (4.25 + stream * .32),
-        thickness: random(-1.34, 1.34),
-        size: random(.55, 1.3),
+        thickness: random(-1.05, 1.05),
+        size: random(.5, 1.15),
         tone: index % 7 === 0 ? 2 : stream % 2,
         lane: stream,
         phase: random(0, Math.PI * 2),
@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const secondBeat = Math.exp(-Math.pow((age - 1510) / 125, 2)) * .045;
     const idleBeat = age > 1900 ? Math.sin(age / 520) * .008 : 0;
     const scale = Math.min(width / 42, height / 33) * .94 * (1 + firstBeat + secondBeat + idleBeat);
-    const scaleX = scale * 2.35;
+    const scaleX = scale * 1.72;
     const scaleY = scale * .94;
     const time = age * .001;
     const centerX = width / 2;
@@ -377,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
         x: particle.sx + (targetX - particle.sx) * progress,
         y: particle.sy + (targetY - particle.sy) * progress,
         size: particle.size * (.78 + Math.max(0, Math.sin(time * 2 + particle.phase)) * .46),
-        highlight: lightWave > .84
+        highlight: lightWave > .9
       });
     }
 
@@ -423,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.restore();
 
     if (age > 1650) {
-      const fontSize = Math.min(width * .045, height * .09, mobile ? 24 : 29);
+      const fontSize = Math.min(width * .038, height * .078, mobile ? 20 : 27);
       ctx.save();
       ctx.globalAlpha = easeOutCubic((age - 1650) / 650);
       ctx.font = `700 ${fontSize}px "Dancing Script", cursive`;
@@ -569,20 +569,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (running && soundtrack.paused && !event.target.closest('button')) tryStartSound(true);
   }, { passive: true });
 
-  window.addEventListener('resize', () => {
+  function scheduleResize(delay = 100) {
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(() => {
       resize();
       updateOrientation();
-    }, 100);
-  }, { passive: true });
+    }, delay);
+  }
+
+  window.addEventListener('resize', () => scheduleResize(), { passive: true });
+  window.visualViewport?.addEventListener('resize', () => scheduleResize(60), { passive: true });
 
   window.addEventListener('orientationchange', () => {
-    window.clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(() => {
-      resize();
-      updateOrientation();
-    }, 160);
+    scheduleResize(160);
   });
 
   document.addEventListener('visibilitychange', () => {

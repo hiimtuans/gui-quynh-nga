@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const secondBeat = Math.exp(-Math.pow((age - 1510) / 125, 2)) * .045;
     const idleBeat = age > 1900 ? Math.sin(age / 520) * .008 : 0;
     const scale = Math.min(width / 42, height / 33) * .94 * (1 + firstBeat + secondBeat + idleBeat);
-    const scaleX = scale * 1.42;
+    const scaleX = scale * 2.35;
     const scaleY = scale * .94;
     const time = age * .001;
     const centerX = width / 2;
@@ -423,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.restore();
 
     if (age > 1650) {
-      const fontSize = Math.min(width * .052, height * .105, 31);
+      const fontSize = Math.min(width * .045, height * .09, mobile ? 24 : 29);
       ctx.save();
       ctx.globalAlpha = easeOutCubic((age - 1650) / 650);
       ctx.font = `700 ${fontSize}px "Dancing Script", cursive`;
@@ -432,7 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.fillStyle = '#fff4fa';
       ctx.shadowColor = '#ff3b98';
       ctx.shadowBlur = 13;
-      ctx.fillText(CONFIG.finalMessage, centerX, centerY - scaleY * 1.2);
+      ctx.fillText(CONFIG.finalMessage, centerX, centerY - scaleY * .3);
       ctx.restore();
     }
 
@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.fillStyle = '#f3bdd9';
       ctx.shadowColor = '#ff3b98';
       ctx.shadowBlur = 8;
-      ctx.fillText(CONFIG.finalSubmessage, centerX, centerY + scaleY * 2.15);
+      ctx.fillText(CONFIG.finalSubmessage, centerX, centerY + scaleY * 2.35);
       ctx.restore();
     }
 

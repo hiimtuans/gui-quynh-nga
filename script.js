@@ -253,25 +253,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- PERFECT SYMMETRICAL CLASSICAL ROMANTIC HEART FORMULA ---
+  // --- ELEGANT CLASSIC ROMANTIC HEART FORMULA ---
   function heartPoint(t) {
+    const sinT = Math.sin(t);
+    const cosT = Math.cos(t);
     return {
-      x: 16 * Math.pow(Math.sin(t), 3),
-      y: -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))
+      x: 16 * Math.pow(sinT, 3),
+      y: -(14 * cosT - 5 * Math.cos(2 * t) - 2.5 * Math.cos(3 * t) - 1.2 * Math.cos(4 * t))
     };
   }
 
   function prepareHeart(sourceParticles) {
-    heartCurve = Array.from({ length: 200 }, (_, index) => heartPoint((index / 200) * Math.PI * 2));
+    heartCurve = Array.from({ length: 240 }, (_, index) => heartPoint((index / 240) * Math.PI * 2));
 
     heartParticles = Array.from({ length: heartParticleCount }, (_, index) => {
-      const curveIndex = Math.floor((index / heartParticleCount) * 199);
+      const curveIndex = Math.floor((index / heartParticleCount) * 239);
       const point = heartCurve[curveIndex];
+      const thickness = random(-0.9, 0.9);
       return {
-        tx: point.x + random(-0.8, 0.8),
-        ty: point.y + random(-0.8, 0.8),
-        size: random(1.1, 1.9),
-        color: index % 4 === 0 ? '#ffffff' : '#ff1493',
+        tx: point.x + random(-0.6, 0.6),
+        ty: point.y + random(-0.6, 0.6),
+        size: random(1.2, 2.0),
+        color: index % 3 === 0 ? '#ffffff' : (index % 2 === 0 ? '#ff69b4' : '#ff1493'),
         phase: random(0, Math.PI * 2),
         sx: sourceParticles.length ? sourceParticles[index % sourceParticles.length].x : width / 2,
         sy: sourceParticles.length ? sourceParticles[index % sourceParticles.length].y : height / 2
@@ -283,10 +286,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const reveal = easeOutCubic(age / 1000);
     const pulse = 1 + 0.03 * Math.sin(age * 0.005);
     
-    // PERFECT HEART SCALE (Equal ScaleX & ScaleY)
-    const scale = Math.min(width, height) * 0.0165 * pulse;
+    // ELEGANT HEART SCALE (Thon gọn, kiều diễm, xinh xắn)
+    const scale = Math.min(width, height) * 0.020 * pulse;
+    const scaleX = scale * 0.92;
+    const scaleY = scale * 0.98;
     const centerX = width / 2;
-    const centerY = height / 2 - scale * 1.2;
+    const centerY = height / 2 - scale * 0.5;
 
     ctx.save();
     ctx.globalAlpha = reveal;
@@ -296,8 +301,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const progress = easeOutCubic((age - (index / heartParticles.length) * 200) / 800);
       if (progress <= 0) continue;
 
-      const targetX = centerX + p.tx * scale;
-      const targetY = centerY + p.ty * scale;
+      const targetX = centerX + p.tx * scaleX;
+      const targetY = centerY + p.ty * scaleY;
 
       const curX = p.sx + (targetX - p.sx) * progress;
       const curY = p.sy + (targetY - p.sy) * progress;
@@ -313,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Render Crisp Center Text Inside Heart Cavity
     if (age > 1400) {
-      const fontSize = Math.min(width * 0.042, height * 0.075);
+      const fontSize = Math.min(width * 0.042, height * 0.078, 26);
       ctx.save();
       ctx.globalAlpha = easeOutCubic((age - 1400) / 600);
       ctx.font = `700 ${fontSize}px 'Dancing Script', cursive`;
@@ -322,12 +327,12 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.fillStyle = '#ffffff';
       ctx.shadowColor = '#ff1493';
       ctx.shadowBlur = 14;
-      ctx.fillText(CONFIG.finalMessage, centerX, centerY);
+      ctx.fillText(CONFIG.finalMessage, centerX, centerY - scaleY * 1.0);
       ctx.restore();
     }
 
     if (age > 2200) {
-      const subSize = Math.min(width * 0.02, height * 0.036);
+      const subSize = Math.min(width * 0.018, height * 0.035, 12);
       ctx.save();
       ctx.globalAlpha = easeOutCubic((age - 2200) / 600) * 0.85;
       ctx.font = `700 ${subSize}px 'Be Vietnam Pro', sans-serif`;
@@ -336,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.fillStyle = '#ffb6c1';
       ctx.shadowColor = '#ff1493';
       ctx.shadowBlur = 8;
-      ctx.fillText(CONFIG.finalSubmessage, centerX, centerY + scale * 12);
+      ctx.fillText(CONFIG.finalSubmessage, centerX, centerY + scaleY * 10.5);
       ctx.restore();
     }
 

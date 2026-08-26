@@ -1,0 +1,181 @@
+:root {
+  color-scheme: dark;
+  font-family: "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #050207;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #050207;
+  overscroll-behavior: none;
+}
+
+button { font: inherit; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.experience {
+  background:
+    radial-gradient(ellipse at 50% 46%, rgba(102, 16, 73, .22) 0%, rgba(40, 6, 35, .1) 35%, transparent 67%),
+    radial-gradient(circle at 16% 18%, rgba(85, 17, 93, .12), transparent 32%),
+    radial-gradient(circle at 84% 78%, rgba(135, 15, 73, .1), transparent 34%),
+    linear-gradient(145deg, #08030b 0%, #030105 48%, #09030a 100%);
+}
+
+.experience, #background, #scene, .vignette {
+  position: fixed;
+  inset: 0;
+}
+
+#background, #scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#background { z-index: 0; }
+#scene { z-index: 1; }
+
+.vignette {
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 43%, rgba(3, 0, 5, .14) 70%, rgba(2, 0, 4, .68) 100%),
+    linear-gradient(180deg, rgba(255,255,255,.015), transparent 22%, rgba(0,0,0,.18));
+  box-shadow: inset 0 0 70px rgba(0,0,0,.62);
+}
+
+.overlay {
+  position: fixed;
+  z-index: 30;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: max(22px, env(safe-area-inset-top)) max(22px, env(safe-area-inset-right)) max(22px, env(safe-area-inset-bottom)) max(22px, env(safe-area-inset-left));
+  background: radial-gradient(circle at 50% 43%, rgba(104,18,72,.32), transparent 40%), rgba(4,1,6,.94);
+  transition: opacity .38s ease, visibility .38s ease;
+}
+
+.hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.rotate-card { text-align: center; color: #fff5fa; }
+.rotate-card h2 { margin: 24px 0 8px; font-size: 20px; }
+.rotate-card p { margin: 0; color: #c4a9b9; font-size: 13px; }
+
+.phone {
+  width: 50px;
+  height: 82px;
+  margin: auto;
+  border: 3px solid #ff65ab;
+  border-radius: 10px;
+  box-shadow: 0 0 22px rgba(255,62,151,.45);
+  animation: rotate-phone 2.1s ease-in-out infinite;
+}
+
+.phone span {
+  display: block;
+  width: 4px;
+  height: 4px;
+  margin: 68px auto 0;
+  border-radius: 50%;
+  background: #ff65ab;
+}
+
+.icon-button, .replay-button {
+  position: fixed;
+  z-index: 10;
+  border: 1px solid rgba(255,255,255,.14);
+  color: rgba(255,255,255,.78);
+  background: rgba(16,5,14,.5);
+  backdrop-filter: blur(7px);
+  cursor: pointer;
+  transition: opacity .3s ease, transform .2s ease, background .2s ease;
+}
+
+.icon-button {
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  display: grid;
+  width: 38px;
+  height: 38px;
+  padding: 9px;
+  place-items: center;
+  border-radius: 50%;
+  opacity: .58;
+}
+
+.icon-button:hover, .icon-button:focus-visible { opacity: 1; }
+
+.icon-button svg {
+  width: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon-button .sound-off { display: none; }
+.icon-button.muted .sound-on { display: none; }
+.icon-button.muted .sound-off { display: block; }
+
+.replay-button {
+  left: 50%;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  padding: 8px 17px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.audio-hint {
+  position: fixed;
+  z-index: 8;
+  left: 50%;
+  bottom: max(17px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 8px 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  color: rgba(255,238,247,.72);
+  background: rgba(18,5,15,.5);
+  font-size: 11px;
+  pointer-events: none;
+  animation: hint-pulse 1.8s ease-in-out infinite;
+  transition: opacity .3s ease, visibility .3s ease;
+}
+
+@keyframes rotate-phone {
+  0%, 20% { transform: rotate(0); }
+  48%, 72% { transform: rotate(90deg); }
+  100% { transform: rotate(0); }
+}
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: .5; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone, .audio-hint { animation-duration: 4s; }
+}

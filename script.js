@@ -345,6 +345,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const secondBeat = Math.exp(-Math.pow((age - 1510) / 125, 2)) * .045;
     const idleBeat = age > 1900 ? Math.sin(age / 520) * .008 : 0;
     const scale = Math.min(width / 42, height / 33) * .94 * (1 + firstBeat + secondBeat + idleBeat);
+    const scaleX = scale * 1.42;
+    const scaleY = scale * .94;
     const time = age * .001;
     const centerX = width / 2;
     const centerY = height / 2 - Math.min(20, height * .055);
@@ -367,8 +369,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const normalY = currentPoint.ny + (nextPoint.ny - currentPoint.ny) * mix;
       const flowWave = Math.sin(particle.curvePosition * .26 - time * 3.2 + particle.lane * .55) * .14;
       const flowingThickness = particle.thickness + flowWave;
-      const targetX = centerX + (pointX + normalX * flowingThickness) * scale;
-      const targetY = centerY + (pointY + normalY * flowingThickness) * scale;
+      const targetX = centerX + (pointX + normalX * flowingThickness) * scaleX;
+      const targetY = centerY + (pointY + normalY * flowingThickness) * scaleY;
       const lightWave = Math.sin(curvePosition * .24 - time * 4.6 + particle.lane * .42);
       positions.push({
         particle,
@@ -430,7 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.fillStyle = '#fff4fa';
       ctx.shadowColor = '#ff3b98';
       ctx.shadowBlur = 13;
-      ctx.fillText(CONFIG.finalMessage, centerX, centerY - scale * 1.2);
+      ctx.fillText(CONFIG.finalMessage, centerX, centerY - scaleY * 1.2);
       ctx.restore();
     }
 
@@ -444,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.fillStyle = '#f3bdd9';
       ctx.shadowColor = '#ff3b98';
       ctx.shadowBlur = 8;
-      ctx.fillText(CONFIG.finalSubmessage, centerX, centerY + scale * 2.15);
+      ctx.fillText(CONFIG.finalSubmessage, centerX, centerY + scaleY * 2.15);
       ctx.restore();
     }
 
